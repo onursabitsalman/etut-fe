@@ -18,8 +18,8 @@ import PropTypes from 'prop-types';
 import NavItem from './navitem';
 
 const user = {
-  jobTitle: 'Senior Developer',
-  name: 'Onur Amcan'
+  jobTitle: 'Dükkan Sahibi',
+  name: 'Etütcü Baba'
 };
 
 const adminMenu = [

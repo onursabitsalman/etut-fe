@@ -20,5 +20,5 @@ export default class Enums {
   static ALERT_MODAL = 'ALERT_MODAL';
 
   // SERVER URL WITH CONTEXT PATH
-  static SERVER_URL = 'http://88.99.189.231:8090/api'
+  static SERVER_URL = 'http://localhost:8090/api'
 }
