@@ -1,0 +1,52 @@
+{
+  "root": true,
+  "env": {
+    "es6": true,
+    "browser": true
+  },
+  "extends": ["airbnb"],
+  "settings": {
+    "import/resolver": {
+      "node": {
+        "paths": ["."],
+        "extensions": [".js", ".jsx"]
+      }
+    }
+  },
+  "rules": {
+    "comma-dangle": "off",
+    "jsx-a11y/anchor-is-valid": "off",
+    "max-len": "off",
+    "no-console": "off",
+    "no-plusplus": "off",
+    "react/forbid-prop-types": "off",
+    "react/jsx-filename-extension": "off",
+    "react/jsx-props-no-spreading": "off",
+    "react/react-in-jsx-scope": "off",
+    "react/require-default-props": "off",
+    "linebreak-style": 0,
+    "object-curly-newline": "off",
+    "indent": "off",
+    "camelcase": ["error", { "allow": ["jwt_decode"] }],
+    "react/prop-types": "off",
+    "react/jsx-wrap-multilines": [
+      "error",
+      {
+        "declaration": "parens-new-line",
+        "assignment": "parens-new-line",
+        "return": "parens-new-line",
+        "arrow": "parens-new-line",
+        "condition": "parens-new-line",
+        "logical": "ignore",
+        "prop": "ignore"
+      }
+    ],
+    "no-nested-ternary": "off",
+    "arrow-body-style": 0,
+    "react/jsx-one-expression-per-line": "off",
+    "import/prefer-default-export": "off",
+    "react/destructuring-assignment": "off",
+    "jsx-a11y/label-has-associated-control": "off",
+    "no-unused-vars": "off"
+  }
+}

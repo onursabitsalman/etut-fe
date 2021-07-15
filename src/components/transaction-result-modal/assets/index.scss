@@ -1,0 +1,37 @@
+.modal-wrapper {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  min-height: 200px;
+  background-color: #fff;
+  box-shadow: 24;
+}
+
+@media only screen and (max-width: 600px) {
+  .modal-wrapper {
+    &.sm,
+    &.md,
+    &.lg,
+    &.xg {
+      width: 90%;
+    }
+  }
+}
+
+@media only screen and (min-width: 600px) {
+  .modal-wrapper {
+    &.sm {
+      width: 500px;
+    }
+    &.md {
+      width: 600px;
+    }
+    &.lg {
+      width: 750px;
+    }
+    &.xl {
+      width: 1000px;
+    }
+  }
+}
