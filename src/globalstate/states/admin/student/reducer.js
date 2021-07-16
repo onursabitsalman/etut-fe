@@ -1,85 +1,65 @@
-import {
-  STUDENT_LIST_FULFILLED,
-  STUDENT_LIST_REJECTED,
-  STUDENT_LIST_PENDING,
-  DELETE_STUDENT_FULFILLED,
-  DELETE_STUDENT_REJECTED,
-  DELETE_STUDENT_PENDING
-} from './action';
+import Const from './constant';
 
-const initialState = {
-  data: {
-    studentList: []
+const initials = {
+  studentList: {
+    data: { studentList: [] },
+    success: false,
+    fetching: false,
+    error: null
   },
-  success: false,
-  fetching: false,
-  error: null
+  deleteStudent: {
+    data: {},
+    success: false,
+    fetching: false,
+    error: null
+  }
 };
 
-export const studentListReducer = (state = initialState, { type, payload }) => {
-  switch (type) {
-    case STUDENT_LIST_PENDING:
+export const studentListReducer = (state = initials.studentList, action) => {
+  switch (action.type) {
+    case Const.STUDENT_LIST_PENDING:
       return {
         ...state,
         fetching: true
       };
-
-    case STUDENT_LIST_FULFILLED:
-      console.log('payload.data: ', payload.data);
+    case Const.STUDENT_LIST_FULFILLED:
       return {
         fetching: false,
-        data: {
-          studentList: payload.data
-        },
+        data: { studentList: action.payload },
         error: null,
         success: true
       };
-
-    case STUDENT_LIST_REJECTED:
+    case Const.STUDENT_LIST_REJECTED:
       return {
         fetching: false,
-        data: {
-          studentList: []
-        },
-        error: payload,
+        data: { studentList: [] },
+        error: action.payload,
         success: false
       };
     default:
       return state;
   }
 };
-const deleteStudentInitialState = {
-  data: {},
-  success: false,
-  fetching: false,
-  error: null
-};
 
-export const deleteStudentReducer = (
-  state = deleteStudentInitialState,
-  { type, payload }
-) => {
-  switch (type) {
-    case DELETE_STUDENT_PENDING:
+export const deleteStudentReducer = (state = initials.deleteStudent, action) => {
+  switch (action.type) {
+    case Const.DELETE_STUDENT_PENDING:
       return {
         ...state,
         fetching: true
       };
-
-    case DELETE_STUDENT_FULFILLED:
-      console.log('payload.data: ', payload.data);
+    case Const.DELETE_STUDENT_FULFILLED:
       return {
         fetching: false,
         data: {},
         error: null,
         success: true
       };
-
-    case DELETE_STUDENT_REJECTED:
+    case Const.DELETE_STUDENT_REJECTED:
       return {
         fetching: false,
         data: {},
-        error: payload,
+        error: action.payload,
         success: false
       };
     default:

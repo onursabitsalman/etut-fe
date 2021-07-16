@@ -26,23 +26,14 @@ const modalEnums = {
 };
 
 const StudentList = (props) => {
-  const [modalToBeOpened, setModalToBeOpened] = useState({
-    name: '',
-    type: ''
-  });
+  const [modalToBeOpened, setModalToBeOpened] = useState({ name: '', type: '' });
 
   useEffect(() => {
-    // Your code here
     props.getStudentList();
   }, []);
 
   const handleClickIcon = (e, calledFunction, studentId) => {
     e.stopPropagation();
-    if (calledFunction === '3') {
-      props.deleteStudent(studentId).then(() => {
-        props.getStudentList();
-      });
-    }
     console.log('handle-click-icons');
   };
 
@@ -71,6 +62,15 @@ const StudentList = (props) => {
         content: 'Lütfen excel dosyası seçin.'
       });
     }
+  };
+
+  const handleDelete = ({ data }) => {
+    const deletedStudentIds = data.map(
+      (d) => props.studentListReducer.data.studentList[d.index].id
+    );
+    props.deleteStudent(deletedStudentIds);
+    /* TODO: deleteStudent success olunca return true fail olunca return false ettirilecek */
+    /* return false; */
   };
 
   return (
@@ -124,6 +124,7 @@ const StudentList = (props) => {
           columns={getColumns(handleClickIcon)}
           options={{
             onRowClick: (e) => console.log('haydar', e),
+            onRowsDelete: handleDelete,
             print: false,
             viewColumns: false,
             download: false

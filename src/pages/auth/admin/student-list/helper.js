@@ -27,8 +27,6 @@ export const getColumns = (onClickIcon) => {
         filter: false,
         sort: false,
         customBodyRender: (id, row) => {
-          console.log('id: ', id);
-          console.log('row: ', row);
           return (
             <Box>
               <IconButtonWithTooltip
@@ -40,11 +38,6 @@ export const getColumns = (onClickIcon) => {
                 tooltipTitle="Profil"
                 icon={<PersonAddIcon color="default" />}
                 onClick={(e) => onClickIcon(e, '2', id)}
-              />
-              <IconButtonWithTooltip
-                tooltipTitle="Sil"
-                icon={<DeleteIcon color="secondary" />}
-                onClick={(e) => onClickIcon(e, '3', id)}
               />
             </Box>
           );
