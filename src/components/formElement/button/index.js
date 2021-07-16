@@ -14,8 +14,8 @@ const ButtonWrapper = (props) => {
     ...rest
   };
 
+  const { submitForm } = useFormikContext();
   if (partofform) {
-    const { submitForm } = useFormikContext();
     const handleSubmit = () => {
       submitForm();
     };
