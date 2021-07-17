@@ -14,9 +14,9 @@ export const getStudentListApi = async () => {
   }
 };
 
-export const deleteStudentApi = async (id) => {
+export const deleteStudentApi = async (ids) => {
   try {
-    const { data } = await axios.delete(`${Enums.SERVER_URL}/student/${id}`, {
+    const { data } = await axios.delete(`${Enums.SERVER_URL}/student/${ids.join(',')}`, {
       headers: {
         Authorization: localStorage.getItem('access_token')
       }

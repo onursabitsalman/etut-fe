@@ -7,10 +7,12 @@ import Box from '@material-ui/core/Box';
 import Button from '@material-ui/core/Button';
 import NoteAddIcon from '@material-ui/icons/NoteAdd';
 import PersonAddIcon from '@material-ui/icons/PersonAdd';
-import DeleteIcon from '@material-ui/icons/Delete';
 import MUIDataTable from 'mui-datatables';
 
 import TransactionResultModal from 'src/components/transaction-result-modal';
+import Loading from 'src/components/loading';
+import Title from 'src/components/title';
+import ShowError from 'src/components/show-error';
 
 import Enums from 'src/libraries/enums';
 
@@ -75,75 +77,73 @@ const StudentList = (props) => {
 
   return (
     <>
-      <Helmet>
-        <title>Students | Kurum Adı</title>
-      </Helmet>
-      <Box>
-        <Box className="mB10" display="flex">
-          <Button
-            sx={{ mx: 1 }}
-            color="primary"
-            variant="contained"
-            startIcon={<PersonAddIcon />}
-          >
-            Öğrenci Ekle
-          </Button>
-          <Stack>
-            <label htmlFor="contained-button-file">
-              <Input
-                accept="image/*"
-                id="contained-button-file"
-                multiple
-                type="file"
-                sx={{ display: 'none' }}
-                onChange={handleCapture}
-              />
-              <Button
-                sx={{ mx: 1 }}
-                color="primary"
-                variant="outlined"
-                startIcon={<NoteAddIcon />}
-                component="span"
-              >
-                Excel Yükle
-              </Button>
-            </label>
-          </Stack>
-          <Button
-            sx={{ mx: 1 }}
-            color="secondary"
-            variant="outlined"
-            startIcon={<DeleteIcon />}
-          >
-            Sil
-          </Button>
+      <Title title="Student | Kurum Adu" />
+      {(props.studentListReducer.fetching || props.deleteStudentReducer.fetching) && (
+        <Loading />
+      )}
+      {props.studentListReducer.error ? (
+        <ShowError error={props.studentListReducer.error} />
+      ) : props.studentListReducer.success ? (
+        <Box>
+          <Box className="mB10" display="flex">
+            <Button
+              sx={{ mx: 1 }}
+              color="primary"
+              variant="contained"
+              startIcon={<PersonAddIcon />}
+            >
+              Öğrenci Ekle
+            </Button>
+            <Stack>
+              <label htmlFor="contained-button-file">
+                <Input
+                  accept="image/*"
+                  id="contained-button-file"
+                  multiple
+                  type="file"
+                  sx={{ display: 'none' }}
+                  onChange={handleCapture}
+                />
+                <Button
+                  sx={{ mx: 1 }}
+                  color="primary"
+                  variant="outlined"
+                  startIcon={<NoteAddIcon />}
+                  component="span"
+                >
+                  Excel Yükle
+                </Button>
+              </label>
+            </Stack>
+          </Box>
+          <MUIDataTable
+            title="Ögrenci Listesi"
+            data={props.studentListReducer.data.studentList}
+            columns={getColumns(handleClickIcon)}
+            options={{
+              onRowClick: (e) => console.log('haydar', e),
+              onRowsDelete: handleDelete,
+              print: false,
+              viewColumns: false,
+              download: false
+            }}
+          />
+          <TransactionResultModal
+            open={modalToBeOpened.name}
+            onClickClose={handleCloseModal}
+            title="Excel Yükleme"
+            alertType={modalToBeOpened.type}
+            content={modalToBeOpened.content}
+          />
         </Box>
-        <MUIDataTable
-          title="Ögrenci Listesi"
-          data={props.studentListReducer.data.studentList}
-          columns={getColumns(handleClickIcon)}
-          options={{
-            onRowClick: (e) => console.log('haydar', e),
-            onRowsDelete: handleDelete,
-            print: false,
-            viewColumns: false,
-            download: false
-          }}
-        />
-        <TransactionResultModal
-          open={modalToBeOpened.name}
-          onClickClose={handleCloseModal}
-          title="Excel Yükleme"
-          alertType={modalToBeOpened.type}
-          content={modalToBeOpened.content}
-        />
-      </Box>
+      ) : null}
     </>
   );
 };
 
 const mapStateToProps = (state) => ({
-  studentListReducer: state.studentListReducer
+  studentListReducer: state.studentListReducer,
+  deleteStudentReducer: state.deleteStudentReducer
 });
 
 const mapDispatchToProps = {
