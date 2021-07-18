@@ -1,5 +1,5 @@
 import Const from './constant';
-import { getStudentListApi, deleteStudentApi } from './apis';
+import { getStudentListApi, deleteStudentApi, addStudentApi } from './apis';
 
 export const getStudentList = () => (dispatch) => {
   dispatch({ type: Const.STUDENT_LIST_PENDING });
@@ -33,5 +33,25 @@ export const deleteStudent = (id) => (dispatch) => {
         type: Const.DELETE_STUDENT_REJECTED,
         payload: error
       });
+    });
+};
+
+export const addStudent = (submitData) => (dispatch) => {
+  dispatch({ type: Const.ADD_STUDENT_PENDING });
+  return addStudentApi(submitData)
+    .then((response) => {
+      dispatch({
+        type: Const.ADD_STUDENT_FULFILLED,
+        payload: response
+      });
+      dispatch(getStudentList());
+      return Promise.resolve();
+    })
+    .catch((error) => {
+      dispatch({
+        type: Const.ADD_STUDENT_REJECTED,
+        payload: error
+      });
+      return Promise.reject();
     });
 };

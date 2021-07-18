@@ -26,3 +26,14 @@ export const deleteStudentApi = async (ids) => {
     return Promise.reject(error.response.data);
   }
 };
+
+export const addStudentApi = async (submitData) => {
+  try {
+    const { data } = await axios.post(`${Enums.SERVER_URL}/student`, submitData, {
+      headers: { Authorization: localStorage.getItem('access_token') }
+    });
+    return Promise.resolve(data);
+  } catch (error) {
+    return Promise.reject(error.response.data);
+  }
+};

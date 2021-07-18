@@ -12,6 +12,12 @@ const initials = {
     success: false,
     fetching: false,
     error: null
+  },
+  addStudent: {
+    data: {},
+    success: false,
+    fetching: false,
+    error: null
   }
 };
 
@@ -56,6 +62,32 @@ export const deleteStudentReducer = (state = initials.deleteStudent, action) => 
         success: true
       };
     case Const.DELETE_STUDENT_REJECTED:
+      return {
+        fetching: false,
+        data: {},
+        error: action.payload,
+        success: false
+      };
+    default:
+      return state;
+  }
+};
+
+export const addStudentReducer = (state = initials.addStudent, action) => {
+  switch (action.type) {
+    case Const.ADD_STUDENT_PENDING:
+      return {
+        ...state,
+        fetching: true
+      };
+    case Const.ADD_STUDENT_FULFILLED:
+      return {
+        fetching: false,
+        data: action.payload,
+        error: null,
+        success: true
+      };
+    case Const.ADD_STUDENT_REJECTED:
       return {
         fetching: false,
         data: {},

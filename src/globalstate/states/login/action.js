@@ -13,7 +13,6 @@ export const login = (username, password) => async (dispatch) => {
       return Promise.resolve(response);
     })
     .catch((error) => {
-      console.log('error: ', error);
       dispatch({
         type: Const.LOGIN_REJECTED,
         payload: error

@@ -13,6 +13,8 @@ import Title from 'src/components/title';
 import ShowError from 'src/components/show-error';
 import Button from 'src/components/formElement/button';
 
+import AddingStudent from './addingStudent';
+
 import Enums from 'src/libraries/enums';
 
 import {
@@ -23,11 +25,12 @@ import {
 import { getColumns } from './helper';
 
 const modalEnums = {
-  UPLOADED_EXCEL: 'UPLOADED_EXCEL'
+  UPLOADED_EXCEL: 'UPLOADED_EXCEL',
+  ADDING_STUDENT: 'ADDING_STUDENT'
 };
 
 const StudentList = (props) => {
-  const [modalToBeOpened, setModalToBeOpened] = useState({ name: '', type: '' });
+  const [modal, setModal] = useState({ name: '', alertType: '', content: '' });
 
   useEffect(() => {
     props.getStudentList();
@@ -43,7 +46,7 @@ const StudentList = (props) => {
   }; */
 
   const handleCloseModal = () => {
-    setModalToBeOpened({ type: '', show: false });
+    setModal({ name: '' });
   };
 
   const handleCapture = (e) => {
@@ -53,11 +56,11 @@ const StudentList = (props) => {
       fileReader.readAsDataURL(e.target.files[0]);
       fileReader.onload = (event) => {
         console.log('event.target.result: ', event.target.result);
-        /* setModalToBeOpened({ name: modalEnums.UPLOADED_EXCEL ,type: Enums.SUCCESS }); */
+        /* setModal({ name: modalEnums.UPLOADED_EXCEL ,type: Enums.SUCCESS }); */
         /* excel okuyan servis cagrılacak   */
       };
     } else {
-      setModalToBeOpened({
+      setModal({
         name: modalEnums.UPLOADED_EXCEL,
         type: Enums.ERROR,
         content: 'Lütfen excel dosyası seçin.'
@@ -83,7 +86,11 @@ const StudentList = (props) => {
       ) : props.studentListReducer.success ? (
         <Box>
           <Box className="mB10" display="flex">
-            <Button startIcon={<PersonAddIcon />} text="Öğrenci Ekle" />
+            <Button
+              startIcon={<PersonAddIcon />}
+              text="Öğrenci Ekle"
+              onClick={() => setModal({ name: modalEnums.ADDING_STUDENT })}
+            />
             <Stack>
               <label htmlFor="contained-button-file">
                 <Input
@@ -116,11 +123,15 @@ const StudentList = (props) => {
             }}
           />
           <TransactionResultModal
-            open={modalToBeOpened.name}
+            open={modal.name === modalEnums.UPLOADED_EXCEL}
             onClickClose={handleCloseModal}
             title="Excel Yükleme"
-            alertType={modalToBeOpened.type}
-            content={modalToBeOpened.content}
+            alertType={modal.type}
+            content={modal.content}
+          />
+          <AddingStudent
+            open={modal.name === modalEnums.ADDING_STUDENT}
+            onClickClose={handleCloseModal}
           />
         </Box>
       ) : null}

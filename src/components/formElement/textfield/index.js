@@ -10,6 +10,7 @@ const TextFieldWrapper = ({ name, ...rest }) => {
     fullWidth: true,
     className: 'mB10',
     autoComplete: 'off',
+    size: 'small',
     ...field,
     ...rest
   };
