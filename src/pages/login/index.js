@@ -31,25 +31,16 @@ const Login = (props) => {
   const navigate = useNavigate();
 
   const handleSubmitLogin = (submitData) => {
-    navigate('auth/admin/dashboard');
-
-    props
-      .login(submitData.userName, submitData.password)
-      .then((response) => {
-        const decoded = jwt_decode(
-          response.headers.authorization.replace('Bearer ', '')
-        );
-        if (decoded.sub === Enums.ADMIN) {
-          navigate('auth/admin/dashboard');
-        } else if (decoded.sub === Enums.STUDENT) {
-          navigate('auth/student/dashboard');
-        } else if (decoded.sub === Enums.TEACHER) {
-          navigate('auth/teacher/dashboard');
-        }
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+    props.login(submitData.userName, submitData.password).then((response) => {
+      const decoded = jwt_decode(response.authorization.replace('Bearer ', ''));
+      if (decoded.sub === Enums.ADMIN) {
+        navigate('auth/admin/dashboard');
+      } else if (decoded.sub === Enums.STUDENT) {
+        navigate('auth/student/dashboard');
+      } else if (decoded.sub === Enums.TEACHER) {
+        navigate('auth/teacher/dashboard');
+      }
+    });
   };
 
   return (
@@ -57,24 +48,14 @@ const Login = (props) => {
       <Helmet>
         <title>Giriş | Kurum Adı</title>
       </Helmet>
-      <Box
-        height="100%"
-        display="flex"
-        justifyContent="center"
-        flexDirection="column"
-      >
+      <Box height="100%" display="flex" justifyContent="center" flexDirection="column">
         <Container maxWidth="sm">
-          <Typography
-            color="textPrimary"
-            variant="h2"
-            align="center"
-            gutterBottom
-          >
+          <Typography color="textPrimary" variant="h2" align="center" gutterBottom>
             Kurum Adı
           </Typography>
           {props.loginReducer.error && (
             <Alert className="mB15" variant="filled" severity="error">
-              Invalid user or password
+              {props.loginReducer.error}
             </Alert>
           )}
           <Formik
@@ -85,7 +66,13 @@ const Login = (props) => {
             <Form>
               <TextField name="userName" label="Kullanıcı Adı" />
               <TextField name="password" label="Şifre" type="password" />
-              <Button text="Giriş" partofform />
+              <Button
+                text="Giriş"
+                partofform
+                className="w100"
+                type="submit"
+                loading={props.loginReducer.fetching}
+              />
             </Form>
           </Formik>
         </Container>

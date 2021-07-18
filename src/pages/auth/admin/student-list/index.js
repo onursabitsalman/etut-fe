@@ -1,10 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { connect } from 'react-redux';
-import { Helmet } from 'react-helmet';
 import Input from '@material-ui/core/Input';
 import Stack from '@material-ui/core/Stack';
 import Box from '@material-ui/core/Box';
-import Button from '@material-ui/core/Button';
 import NoteAddIcon from '@material-ui/icons/NoteAdd';
 import PersonAddIcon from '@material-ui/icons/PersonAdd';
 import MUIDataTable from 'mui-datatables';
@@ -13,6 +11,7 @@ import TransactionResultModal from 'src/components/transaction-result-modal';
 import Loading from 'src/components/loading';
 import Title from 'src/components/title';
 import ShowError from 'src/components/show-error';
+import Button from 'src/components/formElement/button';
 
 import Enums from 'src/libraries/enums';
 
@@ -71,8 +70,6 @@ const StudentList = (props) => {
       (d) => props.studentListReducer.data.studentList[d.index].id
     );
     props.deleteStudent(deletedStudentIds);
-    /* TODO: deleteStudent success olunca return true fail olunca return false ettirilecek */
-    /* return false; */
   };
 
   return (
@@ -86,14 +83,7 @@ const StudentList = (props) => {
       ) : props.studentListReducer.success ? (
         <Box>
           <Box className="mB10" display="flex">
-            <Button
-              sx={{ mx: 1 }}
-              color="primary"
-              variant="contained"
-              startIcon={<PersonAddIcon />}
-            >
-              Öğrenci Ekle
-            </Button>
+            <Button startIcon={<PersonAddIcon />} text="Öğrenci Ekle" />
             <Stack>
               <label htmlFor="contained-button-file">
                 <Input
@@ -105,14 +95,11 @@ const StudentList = (props) => {
                   onChange={handleCapture}
                 />
                 <Button
-                  sx={{ mx: 1 }}
-                  color="primary"
-                  variant="outlined"
+                  className="mL5"
                   startIcon={<NoteAddIcon />}
-                  component="span"
-                >
-                  Excel Yükle
-                </Button>
+                  text="Excel Yükle"
+                  variant="outlined"
+                />
               </label>
             </Stack>
           </Box>

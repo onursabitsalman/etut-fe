@@ -8,18 +8,14 @@ const ButtonWrapper = (props) => {
 
   const configButton = {
     variant: 'contained',
-    fullWidth: true,
     color: 'primary',
-    size: 'large',
+    size: 'medium',
     ...rest
   };
 
-  const { submitForm } = useFormikContext();
+  const { submitForm } = useFormikContext() || {};
   if (partofform) {
-    const handleSubmit = () => {
-      submitForm();
-    };
-    configButton.onClick = handleSubmit;
+    configButton.onClick = () => submitForm();
   } else {
     configButton.onClick = onClick;
   }

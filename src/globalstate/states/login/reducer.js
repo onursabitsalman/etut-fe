@@ -1,40 +1,35 @@
-import { LOGIN_FULFILLED, LOGIN_REJECTED, LOGIN_PENDING } from './action';
+import Const from './constant';
 
-const initialState = {
-  data: {
-    isAuth: false
-  },
-  success: false,
-  fetching: false,
-  error: null
+const initials = {
+  login: {
+    data: { isAuth: false },
+    success: false,
+    fetching: false,
+    error: null
+  }
 };
 
-export default (state = initialState, { type, payload }) => {
-  switch (type) {
-    case LOGIN_PENDING:
+export default (state = initials.login, action) => {
+  switch (action.type) {
+    case Const.LOGIN_PENDING:
       return {
         ...state,
         fetching: true
       };
 
-    case LOGIN_FULFILLED:
+    case Const.LOGIN_FULFILLED:
       return {
         fetching: false,
-        data: {
-          isAuth: true,
-          ...payload
-        },
+        data: { isAuth: true, ...action.payload },
         error: null,
         success: true
       };
 
-    case LOGIN_REJECTED:
+    case Const.LOGIN_REJECTED:
       return {
         fetching: false,
-        data: {
-          isAuth: false
-        },
-        error: payload,
+        data: { isAuth: false },
+        error: action.payload,
         success: false
       };
     default:

@@ -1,30 +1,23 @@
-import axios from 'axios';
-import Enums from 'src/libraries/enums';
-
-export const LOGIN_PENDING = 'LOGIN_PENDING';
-export const LOGIN_FULFILLED = 'LOGIN_FULFILLED';
-export const LOGIN_REJECTED = 'LOGIN_REJECTED';
+import Const from './constant';
+import { loginApi } from './apis';
 
 export const login = (username, password) => async (dispatch) => {
-  dispatch({
-    type: LOGIN_PENDING
-  });
-  try {
-    const response = await axios.post(`${Enums.SERVER_URL}/auth/login`, {
-      username,
-      password
+  dispatch({ type: Const.LOGIN_PENDING });
+  return loginApi(username, password)
+    .then((response) => {
+      dispatch({
+        type: Const.LOGIN_FULFILLED,
+        payload: response
+      });
+      localStorage.setItem('access_token', response.authorization);
+      return Promise.resolve(response);
+    })
+    .catch((error) => {
+      console.log('error: ', error);
+      dispatch({
+        type: Const.LOGIN_REJECTED,
+        payload: error
+      });
+      return Promise.reject(error);
     });
-    localStorage.setItem('access_token', response.headers.authorization);
-    dispatch({
-      type: LOGIN_FULFILLED,
-      payload: response
-    });
-    return response;
-  } catch (error) {
-    dispatch({
-      type: LOGIN_REJECTED,
-      payload: error
-    });
-    return error;
-  }
 };

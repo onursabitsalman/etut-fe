@@ -1,7 +1,7 @@
 import Const from './constant';
 import { getStudentListApi, deleteStudentApi } from './apis';
 
-export const getStudentList = () => async (dispatch) => {
+export const getStudentList = () => (dispatch) => {
   dispatch({ type: Const.STUDENT_LIST_PENDING });
   getStudentListApi()
     .then((response) => {
@@ -18,7 +18,7 @@ export const getStudentList = () => async (dispatch) => {
     });
 };
 
-export const deleteStudent = (id) => async (dispatch) => {
+export const deleteStudent = (id) => (dispatch) => {
   dispatch({ type: Const.DELETE_STUDENT_PENDING });
   deleteStudentApi(id)
     .then((response) => {
