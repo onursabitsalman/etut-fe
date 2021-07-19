@@ -18,6 +18,14 @@ const initials = {
     success: false,
     fetching: false,
     error: null
+  },
+  uploadStudentExcel: {
+    fetching: false,
+    error: null
+  },
+  downloadStudentExcel: {
+    fetching: false,
+    error: null
   }
 };
 
@@ -93,6 +101,56 @@ export const addStudentReducer = (state = initials.addStudent, action) => {
         data: {},
         error: action.payload,
         success: false
+      };
+    default:
+      return state;
+  }
+};
+
+export const uploadStudentExcelReducer = (
+  state = initials.uploadStudentExcel,
+  action
+) => {
+  switch (action.type) {
+    case Const.UPLOAD_STUDENT_EXCEL_PENDING:
+      return {
+        ...state,
+        fetching: true
+      };
+    case Const.UPLOAD_STUDENT_EXCEL_FULFILLED:
+      return {
+        fetching: false,
+        error: null
+      };
+    case Const.UPLOAD_STUDENT_EXCEL_REJECTED:
+      return {
+        fetching: false,
+        error: action.payload
+      };
+    default:
+      return state;
+  }
+};
+
+export const downloadStudentExcelReducer = (
+  state = initials.downloadStudentExcel,
+  action
+) => {
+  switch (action.type) {
+    case Const.DOWNLOAD_STUDENT_EXCEL_PENDING:
+      return {
+        ...state,
+        fetching: true
+      };
+    case Const.DOWNLOAD_STUDENT_EXCEL_FULFILLED:
+      return {
+        fetching: false,
+        error: null
+      };
+    case Const.DOWNLOAD_STUDENT_EXCEL_REJECTED:
+      return {
+        fetching: false,
+        error: action.payload
       };
     default:
       return state;

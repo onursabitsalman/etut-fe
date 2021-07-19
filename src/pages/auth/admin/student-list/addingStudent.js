@@ -11,15 +11,17 @@ import Enums from 'src/libraries/enums';
 
 import { addStudent } from 'src/globalstate/states/admin/student/action';
 
+const regex = /^[a-zA-ZığüşöçİĞÜŞÖÇ]+$/;
+
 const logInValidationSchema = Yup.object().shape({
   username: Yup.string()
     .max(24, 'En fazla 24 karakter girilebilir!')
     .required('Kullanıcı adı boş olamaz'),
   name: Yup.string()
-    .matches(/^[a-zA-Z]+$/, 'lütfen yalnızca harf giriniz!')
+    .matches(regex, 'lütfen yalnızca harf giriniz!')
     .required('İsim boş olamaz'),
   surname: Yup.string()
-    .matches(/^[a-zA-Z]+$/, 'lütfen yalnızca harf giriniz!')
+    .matches(regex, 'lütfen yalnızca harf giriniz!')
     .required('Soyisim boş olamaz'),
   classCode: Yup.string()
     .matches(/^[0-9]+$/, 'lütfen yalnızca rakam giriniz!')

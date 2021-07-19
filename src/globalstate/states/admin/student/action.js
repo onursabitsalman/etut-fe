@@ -1,5 +1,11 @@
 import Const from './constant';
-import { getStudentListApi, deleteStudentApi, addStudentApi } from './apis';
+import {
+  getStudentListApi,
+  deleteStudentApi,
+  addStudentApi,
+  uploadExcelApi,
+  downloadExcelApi
+} from './apis';
 
 export const getStudentList = () => (dispatch) => {
   dispatch({ type: Const.STUDENT_LIST_PENDING });
@@ -53,5 +59,38 @@ export const addStudent = (submitData) => (dispatch) => {
         payload: error
       });
       return Promise.reject();
+    });
+};
+
+export const uploadStudentExcel = (file) => (dispatch) => {
+  dispatch({ type: Const.UPLOAD_STUDENT_EXCEL_PENDING });
+  return uploadExcelApi(file)
+    .then((response) => {
+      dispatch({ type: Const.UPLOAD_STUDENT_EXCEL_FULFILLED });
+      dispatch(getStudentList());
+      return Promise.resolve();
+    })
+    .catch((error) => {
+      dispatch({
+        type: Const.UPLOAD_STUDENT_EXCEL_REJECTED,
+        payload: error
+      });
+      return Promise.reject();
+    });
+};
+
+export const downloadStudentExcel = () => (dispatch) => {
+  dispatch({ type: Const.DOWNLOAD_STUDENT_EXCEL_PENDING });
+  return downloadExcelApi()
+    .then((response) => {
+      dispatch({ type: Const.DOWNLOAD_STUDENT_EXCEL_FULFILLED });
+      return Promise.resolve(response);
+    })
+    .catch((error) => {
+      dispatch({
+        type: Const.DOWNLOAD_STUDENT_EXCEL_REJECTED,
+        payload: error
+      });
+      return Promise.reject(error);
     });
 };
