@@ -5,7 +5,8 @@ import {
   studentListReducer,
   addStudentReducer,
   uploadStudentExcelReducer,
-  downloadStudentExcelReducer
+  downloadStudentExcelReducer,
+  updateStudentReducer
 } from './states/admin/student/reducer';
 
 export default combineReducers({
@@ -14,5 +15,6 @@ export default combineReducers({
   deleteStudentReducer,
   addStudentReducer,
   uploadStudentExcelReducer,
-  downloadStudentExcelReducer
+  downloadStudentExcelReducer,
+  updateStudentReducer
 });

@@ -17,6 +17,8 @@ import ShowError from 'src/components/show-error';
 import Button from 'src/components/formElement/button';
 import AddingStudent from './addingStudent';
 
+import Enums from 'src/libraries/enums';
+
 import {
   getStudentList,
   deleteStudent,
@@ -28,23 +30,36 @@ import { getColumns } from './helper';
 
 const modalEnums = {
   UPLOADED_EXCEL: 'UPLOADED_EXCEL',
-  ADDING_STUDENT: 'ADDING_STUDENT'
+  ADDING_STUDENT: 'ADDING_STUDENT',
+  ERROR_DELETE_STUDENT: 'ERROR_DELETE_STUDENT'
 };
 
 const StudentList = (props) => {
   const [modal, setModal] = useState({ name: '', alertType: '', content: '' });
+  const [updatedStudent, setUpdatedStudent] = useState(null);
 
   useEffect(() => {
-    props.getStudentList();
+    props
+      .getStudentList()
+      .then(() => {
+        console.log('data');
+      })
+      .catch((err) => console.log('err', err));
   }, []);
 
   const handleClickIcon = (e, calledFunction, studentId) => {
     e.stopPropagation();
-    console.log('handle-click-icons');
+    setUpdatedStudent(
+      props.studentListReducer.data.studentList.find((s) => s.id === studentId)
+    );
+    if (calledFunction === '2') {
+      setModal({ name: modalEnums.ADDING_STUDENT });
+    }
   };
 
   const handleCloseModal = () => {
     setModal({ name: '' });
+    setUpdatedStudent(null);
   };
 
   const handleUploadExcel = (e) => {
@@ -57,12 +72,17 @@ const StudentList = (props) => {
     const deletedStudentIds = data.map(
       (d) => props.studentListReducer.data.studentList[d.index].id
     );
-    props.deleteStudent(deletedStudentIds);
+    props
+      .deleteStudent(deletedStudentIds)
+      .then()
+      .catch((error) => {
+        setModal({ name: modalEnums.ERROR_DELETE_STUDENT });
+      });
   };
 
   const handleDownloadExcel = () => {
-    props.downloadStudentExcel().then((res) => {
-      fileDownload(res, 'ögrenci-listesi.xlsx');
+    props.downloadStudentExcel().then((response) => {
+      fileDownload(response.data, 'ögrenci-listesi.xlsx');
     });
   };
 
@@ -110,24 +130,37 @@ const StudentList = (props) => {
             data={props.studentListReducer.data.studentList}
             columns={getColumns(handleClickIcon)}
             options={{
-              onRowClick: (e) => console.log('haydar', e),
               onRowsDelete: handleDelete,
               print: false,
               viewColumns: false,
               download: false
             }}
           />
-          <TransactionResultModal
-            open={modal.name === modalEnums.UPLOADED_EXCEL}
-            onClickClose={handleCloseModal}
-            title="Excel Yükleme"
-            alertType={modal.type}
-            content={modal.content}
-          />
-          <AddingStudent
-            open={modal.name === modalEnums.ADDING_STUDENT}
-            onClickClose={handleCloseModal}
-          />
+          {modal.name === modalEnums.UPLOADED_EXCEL && (
+            <TransactionResultModal
+              open={modal.name}
+              onClickClose={handleCloseModal}
+              title="Excel Yükleme"
+              alertType={modal.type}
+              content={modal.content}
+            />
+          )}
+          {modal.name === modalEnums.ERROR_DELETE_STUDENT && (
+            <TransactionResultModal
+              open={modal.name}
+              onClickClose={handleCloseModal}
+              title="Öğrenci Silme"
+              alertType={Enums.ERROR}
+              content={props.deleteStudentReducer.error}
+            />
+          )}
+          {modal.name === modalEnums.ADDING_STUDENT && (
+            <AddingStudent
+              open={modal.name}
+              onClickClose={handleCloseModal}
+              student={updatedStudent}
+            />
+          )}
         </Box>
       ) : null}
     </>

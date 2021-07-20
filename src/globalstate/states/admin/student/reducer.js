@@ -19,6 +19,10 @@ const initials = {
     fetching: false,
     error: null
   },
+  updateStudent: {
+    fetching: false,
+    error: null
+  },
   uploadStudentExcel: {
     fetching: false,
     error: null
@@ -101,6 +105,28 @@ export const addStudentReducer = (state = initials.addStudent, action) => {
         data: {},
         error: action.payload,
         success: false
+      };
+    default:
+      return state;
+  }
+};
+
+export const updateStudentReducer = (state = initials.updateStudent, action) => {
+  switch (action.type) {
+    case Const.UPDATE_STUDENT_PENDING:
+      return {
+        ...state,
+        fetching: true
+      };
+    case Const.UPDATE_STUDENT_FULFILLED:
+      return {
+        fetching: false,
+        error: null
+      };
+    case Const.UPDATE_STUDENT_REJECTED:
+      return {
+        fetching: false,
+        error: action.payload
       };
     default:
       return state;

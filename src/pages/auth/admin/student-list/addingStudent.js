@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import Box from '@material-ui/core/Box';
 import { connect } from 'react-redux';
 import { Formik, Form } from 'formik';
@@ -9,14 +9,15 @@ import TextField from 'src/components/formElement/textfield';
 import Button from 'src/components/formElement/button';
 import Enums from 'src/libraries/enums';
 
-import { addStudent } from 'src/globalstate/states/admin/student/action';
+import { addStudent, updateStudent } from 'src/globalstate/states/admin/student/action';
 
 const regex = /^[a-zA-ZığüşöçİĞÜŞÖÇ]+$/;
 
-const logInValidationSchema = Yup.object().shape({
-  username: Yup.string()
-    .max(24, 'En fazla 24 karakter girilebilir!')
-    .required('Kullanıcı adı boş olamaz'),
+const modalEnums = {
+  ADD_STUDENT_ERROR: 'ADD_STUDENT_ERROR'
+};
+
+const validationSchema = Yup.object().shape({
   name: Yup.string()
     .matches(regex, 'lütfen yalnızca harf giriniz!')
     .required('İsim boş olamaz'),
@@ -29,11 +30,17 @@ const logInValidationSchema = Yup.object().shape({
     .required('Sınıf boş olamaz'),
   phoneNumber: Yup.string()
     .length(11, 'Telefon numarası 11 haneli olmalı!')
-    .required('Telefon numarası boş olamaz!'),
+    .required('Telefon numarası boş olamaz!')
+});
+
+const optionalValidationSchema = Yup.object().shape({
+  username: Yup.string()
+    .max(24, 'En fazla 24 karakter girilebilir!')
+    .required('Kullanıcı adı boş olamaz'),
   password: Yup.string()
     .min(6, 'Şifre en az 6 haneli olmalı!')
     .max(12, 'Şİfre en fazla 12 haneli olabilir!')
-    .required('Şifre boş olamaz')
+    .required('Şifre boş olamaz!')
 });
 
 const INITIAL_FORM_VALUES = {
@@ -46,11 +53,29 @@ const INITIAL_FORM_VALUES = {
 };
 
 const AddingStudent = (props) => {
+  const [modal, setModal] = useState('');
+
+  const isUpdatingStudent = props.student;
+
   const handleSubmit = (submitData) => {
-    props.addStudent(submitData).then((response) => {
-      props.onClickClose();
-    });
+    if (isUpdatingStudent) {
+      props.updateStudent(submitData).then((response) => {
+        props.onClickClose();
+      });
+    } else {
+      props
+        .addStudent(submitData)
+        .then(() => {
+          props.onClickClose();
+        })
+        .catch((error) => {
+          /* modal göster  */
+          props.onClickClose();
+          setModal(modalEnums.ADD_STUDENT_ERROR);
+        });
+    }
   };
+
   return (
     <TransactionResultModal
       title="Öğrenci Ekle"
@@ -58,23 +83,32 @@ const AddingStudent = (props) => {
       {...props}
     >
       <Formik
-        initialValues={{ ...INITIAL_FORM_VALUES }}
-        validationSchema={logInValidationSchema}
+        initialValues={{ ...INITIAL_FORM_VALUES, ...props.student }}
+        validationSchema={
+          isUpdatingStudent
+            ? validationSchema
+            : validationSchema.concat(optionalValidationSchema)
+        }
         onSubmit={handleSubmit}
       >
         <Form>
-          <TextField name="username" label="Kullanıcı Adı" fullWidth />
+          {!isUpdatingStudent && (
+            <TextField name="username" label="Kullanıcı Adı" fullWidth />
+          )}
           <TextField name="name" label="İsim" fullWidth />
           <TextField name="surname" label="Soyisim" fullWidth />
           <TextField name="classCode" label="Sınıf" fullWidth />
           <TextField name="phoneNumber" label="Telefon Numarası" fullWidth />
-          <TextField name="password" label="Şifre" fullWidth type="password" />
+          {!isUpdatingStudent && (
+            <TextField name="password" label="Şifre" fullWidth type="password" />
+          )}
           <Box textAlign="right">
             <Button
-              text="Kaydet"
+              text={props.student ? 'Güncelle' : 'Kaydet'}
               type="submit"
-              className="ml-auto"
-              loading={props.addStudentReducer.fetching}
+              loading={
+                props.addStudentReducer.fetching || props.updateStudentReducer.fetching
+              }
             />
           </Box>
         </Form>
@@ -84,11 +118,13 @@ const AddingStudent = (props) => {
 };
 
 const mapStateToProps = (state) => ({
-  addStudentReducer: state.addStudentReducer
+  addStudentReducer: state.addStudentReducer,
+  updateStudentReducer: state.updateStudentReducer
 });
 
 const mapDispatchToProps = {
-  addStudent
+  addStudent,
+  updateStudent
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(AddingStudent);
