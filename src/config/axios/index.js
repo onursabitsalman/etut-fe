@@ -1,13 +1,11 @@
 import axios from 'axios';
 
-const setupAxiosInterceptor = () => {
+export const setupAxiosInterceptor = () => {
   const onRequestSuccess = (config) => {
-    const axiosConfig = config;
-    if (!axiosConfig) return axiosConfig;
     if (localStorage.getItem('access_token')) {
-      axiosConfig.headers.Authorization = localStorage.getItem('access_token');
+      config.headers.Authorization = localStorage.getItem('access_token');
     }
-    axiosConfig.timeout = 60000;
+    /* axiosConfig.timeout = 60000; */
     return config;
   };
 
@@ -23,8 +21,12 @@ const setupAxiosInterceptor = () => {
     return Promise.reject(error);
   };
 
-  axios.interceptors.request.use(onRequestSuccess(), onRequestError());
-  axios.interceptors.response.use(onResponseSuccess(), onResponseError());
+  axios.interceptors.request.use(
+    (config) => onRequestSuccess(config),
+    (err) => onRequestError(err)
+  );
+  axios.interceptors.response.use(
+    (config) => onResponseSuccess(config),
+    (err) => onResponseError(err)
+  );
 };
-
-export default setupAxiosInterceptor;

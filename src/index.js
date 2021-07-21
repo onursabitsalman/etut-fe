@@ -10,7 +10,6 @@ import { Provider } from 'react-redux';
 import App from './pages/index';
 
 import rootReducer from './globalstate/index';
-import setupAxiosInterceptor from './config/axios';
 
 import './assets/styles/index.scss';
 
@@ -18,8 +17,6 @@ const store = createStore(
   rootReducer,
   composeWithDevTools(applyMiddleware(reduxPromise, thunk))
 );
-
-setupAxiosInterceptor();
 
 window.addEventListener('unload', () => {
   localStorage.removeItem('access_token');

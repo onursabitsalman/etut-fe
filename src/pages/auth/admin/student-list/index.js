@@ -39,12 +39,7 @@ const StudentList = (props) => {
   const [updatedStudent, setUpdatedStudent] = useState(null);
 
   useEffect(() => {
-    props
-      .getStudentList()
-      .then(() => {
-        console.log('data');
-      })
-      .catch((err) => console.log('err', err));
+    props.getStudentList();
   }, []);
 
   const handleClickIcon = (e, calledFunction, studentId) => {

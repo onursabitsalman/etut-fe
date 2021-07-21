@@ -6,11 +6,7 @@ import Const from './constant';
 export const getStudentList = () => async (dispatch) => {
   dispatch({ type: Const.STUDENT_LIST_PENDING });
   try {
-    const { data } = await axios.get(`${Enums.SERVER_URL}/student`, {
-      headers: {
-        Authorization: localStorage.getItem('access_token')
-      }
-    });
+    const { data } = await axios.get(`${Enums.SERVER_URL}/student`);
     dispatch({
       type: Const.STUDENT_LIST_FULFILLED,
       payload: data
@@ -28,11 +24,7 @@ export const getStudentList = () => async (dispatch) => {
 export const deleteStudent = (id) => async (dispatch) => {
   dispatch({ type: Const.DELETE_STUDENT_PENDING });
   try {
-    await axios.delete(`${Enums.SERVER_URL}/student/${id.join(',')}`, {
-      headers: {
-        Authorization: localStorage.getItem('access_token')
-      }
-    });
+    await axios.delete(`${Enums.SERVER_URL}/student/${id.join(',')}`);
     dispatch({ type: Const.DELETE_STUDENT_FULFILLED });
     dispatch(getStudentList());
     return Promise.resolve();
@@ -45,9 +37,7 @@ export const deleteStudent = (id) => async (dispatch) => {
 export const addStudent = (submitData) => async (dispatch) => {
   dispatch({ type: Const.ADD_STUDENT_PENDING });
   try {
-    await axios.post(`${Enums.SERVER_URL}/student`, submitData, {
-      headers: { Authorization: localStorage.getItem('access_token') }
-    });
+    await axios.post(`${Enums.SERVER_URL}/student`, submitData);
     dispatch({ type: Const.ADD_STUDENT_FULFILLED });
     dispatch(getStudentList());
     return Promise.resolve();
@@ -60,9 +50,7 @@ export const addStudent = (submitData) => async (dispatch) => {
 export const updateStudent = (submitData) => async (dispatch) => {
   dispatch({ type: Const.UPDATE_STUDENT_PENDING });
   try {
-    const { data } = await axios.put(`${Enums.SERVER_URL}/student`, submitData, {
-      headers: { Authorization: localStorage.getItem('access_token') }
-    });
+    await axios.put(`${Enums.SERVER_URL}/student`, submitData);
     dispatch({ type: Const.UPDATE_STUDENT_FULFILLED });
     dispatch(getStudentList());
     return Promise.resolve();
@@ -76,10 +64,7 @@ export const uploadStudentExcel = (file) => async (dispatch) => {
   dispatch({ type: Const.UPLOAD_STUDENT_EXCEL_PENDING });
   try {
     await axios.post(`${Enums.SERVER_URL}/student/import`, file, {
-      headers: {
-        Authorization: localStorage.getItem('access_token'),
-        'Content-Type': 'multipart/form-data'
-      }
+      headers: { 'Content-Type': 'multipart/form-data' }
     });
     dispatch({ type: Const.UPLOAD_STUDENT_EXCEL_FULFILLED });
     dispatch(getStudentList());
@@ -94,10 +79,7 @@ export const downloadStudentExcel = () => async (dispatch) => {
   dispatch({ type: Const.DOWNLOAD_STUDENT_EXCEL_PENDING });
   try {
     const response = await axios.get(`${Enums.SERVER_URL}/student/export`, {
-      responseType: 'blob',
-      headers: {
-        Authorization: localStorage.getItem('access_token')
-      }
+      responseType: 'blob'
     });
     dispatch({ type: Const.DOWNLOAD_STUDENT_EXCEL_FULFILLED });
     return Promise.resolve(response);
