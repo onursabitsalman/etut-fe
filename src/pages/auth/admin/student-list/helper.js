@@ -1,8 +1,7 @@
 import Box from '@material-ui/core/Box';
 
-import NoteAddIcon from '@material-ui/icons/NoteAdd';
-import PersonAddIcon from '@material-ui/icons/PersonAdd';
-import DeleteIcon from '@material-ui/icons/Delete';
+import AssignmentIndIcon from '@material-ui/icons/AssignmentInd';
+import LockIcon from '@material-ui/icons/Lock';
 
 import IconButtonWithTooltip from 'src/components/icon-button-with-tooltip';
 
@@ -31,12 +30,12 @@ export const getColumns = (onClickIcon) => {
             <Box>
               <IconButtonWithTooltip
                 tooltipTitle="Şifre sıfırla"
-                icon={<NoteAddIcon color="primary" />}
+                icon={<LockIcon color="primary" />}
                 onClick={(e) => onClickIcon(e, '1', id)}
               />
               <IconButtonWithTooltip
                 tooltipTitle="Profil"
-                icon={<PersonAddIcon color="default" />}
+                icon={<AssignmentIndIcon color="default" />}
                 onClick={(e) => onClickIcon(e, '2', id)}
               />
             </Box>

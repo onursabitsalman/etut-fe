@@ -1,7 +1,7 @@
 import Box from '@material-ui/core/Box';
 
 import LockIcon from '@material-ui/icons/Lock';
-import DeleteIcon from '@material-ui/icons/Delete';
+
 import PermDataSettingIcon from '@material-ui/icons/PermDataSetting';
 import AssignmentIndIcon from '@material-ui/icons/AssignmentInd';
 
@@ -19,37 +19,33 @@ export const getColumns = (onClickIcon) => {
         filter: true
       }
     },
-    { name: 'fullname', label: 'İsim' },
-    { name: 'major', label: 'Ders' },
-    { name: 'phone', label: 'Telefon Numarası' },
+    { name: 'name', label: 'İsim' },
+    { name: 'surname', label: 'Soyisim' },
+    { name: 'majorType', label: 'Ders' },
+    { name: 'phoneNumber', label: 'Telefon Numarası' },
     {
-      name: 'transactions',
+      name: 'id',
       label: 'İşlemler',
       options: {
         filter: false,
         sort: false,
-        customBodyRender: () => {
+        customBodyRender: (id, row) => {
           return (
             <Box>
               <IconButtonWithTooltip
                 tooltipTitle="Etüt Ayarları"
                 icon={<PermDataSettingIcon color={green[300]} />}
-                onClick={onClickIcon}
-              />
-              <IconButtonWithTooltip
-                tooltipTitle="Profil"
-                icon={<AssignmentIndIcon color="primary" />}
-                onClick={onClickIcon}
+                onClick={(e) => onClickIcon(e, '1', id)}
               />
               <IconButtonWithTooltip
                 tooltipTitle="Şifre Sıfırla"
-                icon={<LockIcon color="default" />}
-                onClick={onClickIcon}
+                icon={<LockIcon color="default" color="primary" />}
+                onClick={(e) => onClickIcon(e, '2', id)}
               />
               <IconButtonWithTooltip
-                tooltipTitle="Sil"
-                icon={<DeleteIcon color="secondary" />}
-                onClick={onClickIcon}
+                tooltipTitle="Profil"
+                icon={<AssignmentIndIcon />}
+                onClick={(e) => onClickIcon(e, '3', id)}
               />
             </Box>
           );

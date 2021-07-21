@@ -9,7 +9,7 @@ import TextField from 'src/components/formElement/textfield';
 import Button from 'src/components/formElement/button';
 import Enums from 'src/libraries/enums';
 
-import { addStudent, updateStudent } from 'src/globalstate/states/admin/student/action';
+import { addTeacher, updateTeacher } from 'src/globalstate/states/admin/teacher/action';
 
 const regex = /^[a-zA-ZığüşöçİĞÜŞÖÇ]+$/;
 
@@ -24,10 +24,9 @@ const validationSchema = Yup.object().shape({
   surname: Yup.string()
     .matches(regex, 'lütfen yalnızca harf giriniz!')
     .required('Soyisim boş olamaz'),
-  classCode: Yup.string()
-    .matches(/^[0-9]+$/, 'lütfen yalnızca rakam giriniz!')
-    .max(2, 'Sınıf en fazla 2 haneli olmalı!')
-    .required('Sınıf boş olamaz'),
+  majorType: Yup.string()
+    .matches(regex, 'lütfen yalnızca harf giriniz!')
+    .required('Ders boş olamaz'),
   phoneNumber: Yup.string()
     .length(11, 'Telefon numarası 11 haneli olmalı!')
     .required('Telefon numarası boş olamaz!')
@@ -47,67 +46,64 @@ const INITIAL_FORM_VALUES = {
   username: '',
   name: '',
   surname: '',
-  classCode: '',
+  majorType: '',
   phoneNumber: '',
   password: ''
 };
 
-const AddingStudent = (props) => {
-  const [modal, setModal] = useState('');
-
-  const isUpdatingStudent = props.student;
+const AddingTeacher = (props) => {
+  const isUpdatingTeacher = props.teacher;
 
   const handleSubmit = (submitData) => {
-    if (isUpdatingStudent) {
-      props.updateStudent(submitData).then((response) => {
+    if (isUpdatingTeacher) {
+      props.updateTeacher(submitData).then((response) => {
         props.onClickClose();
       });
     } else {
       props
-        .addStudent(submitData)
+        .addTeacher(submitData)
         .then(() => {
           props.onClickClose();
         })
         .catch((error) => {
           /* modal göster  */
           props.onClickClose();
-          setModal(modalEnums.ADD_STUDENT_ERROR);
         });
     }
   };
 
   return (
     <TransactionResultModal
-      title={isUpdatingStudent ? 'Profil' : 'Öğrenci Ekle'}
+      title={isUpdatingTeacher ? 'Profil' : 'Öğretmen Ekle'}
       modalType={Enums.CONTENT_MODAL}
       {...props}
     >
       <Formik
-        initialValues={{ ...INITIAL_FORM_VALUES, ...props.student }}
+        initialValues={{ ...INITIAL_FORM_VALUES, ...props.teacher }}
         validationSchema={
-          isUpdatingStudent
+          isUpdatingTeacher
             ? validationSchema
             : validationSchema.concat(optionalValidationSchema)
         }
         onSubmit={handleSubmit}
       >
         <Form>
-          {!isUpdatingStudent && (
+          {!isUpdatingTeacher && (
             <TextField name="username" label="Kullanıcı Adı" fullWidth />
           )}
           <TextField name="name" label="İsim" fullWidth />
           <TextField name="surname" label="Soyisim" fullWidth />
-          <TextField name="classCode" label="Sınıf" fullWidth />
+          <TextField name="majorType" label="Ders" fullWidth />
           <TextField name="phoneNumber" label="Telefon Numarası" fullWidth />
-          {!isUpdatingStudent && (
+          {!isUpdatingTeacher && (
             <TextField name="password" label="Şifre" fullWidth type="password" />
           )}
           <Box textAlign="right">
             <Button
-              text={props.student ? 'Güncelle' : 'Kaydet'}
+              text={isUpdatingTeacher ? 'Güncelle' : 'Kaydet'}
               type="submit"
               loading={
-                props.addStudentReducer.fetching || props.updateStudentReducer.fetching
+                props.addTeacherReducer.fetching || props.updateTeacherReducer.fetching
               }
             />
           </Box>
@@ -118,13 +114,13 @@ const AddingStudent = (props) => {
 };
 
 const mapStateToProps = (state) => ({
-  addStudentReducer: state.addStudentReducer,
-  updateStudentReducer: state.updateStudentReducer
+  addTeacherReducer: state.addTeacherReducer,
+  updateTeacherReducer: state.updateTeacherReducer
 });
 
 const mapDispatchToProps = {
-  addStudent,
-  updateStudent
+  addTeacher,
+  updateTeacher
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(AddingStudent);
+export default connect(mapStateToProps, mapDispatchToProps)(AddingTeacher);

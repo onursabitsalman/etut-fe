@@ -8,6 +8,12 @@ import {
   downloadStudentExcelReducer,
   updateStudentReducer
 } from './states/admin/student/reducer';
+import {
+  teacherListReducer,
+  deleteTeacherReducer,
+  addTeacherReducer,
+  updateTeacherReducer
+} from './states/admin/teacher/reducer';
 
 export default combineReducers({
   loginReducer,
@@ -16,5 +22,9 @@ export default combineReducers({
   addStudentReducer,
   uploadStudentExcelReducer,
   downloadStudentExcelReducer,
-  updateStudentReducer
+  updateStudentReducer,
+  teacherListReducer,
+  deleteTeacherReducer,
+  addTeacherReducer,
+  updateTeacherReducer
 });

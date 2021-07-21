@@ -17,7 +17,7 @@ export const getStudentList = () => async (dispatch) => {
       type: Const.STUDENT_LIST_REJECTED,
       payload: error.response.data.error
     });
-    return Promise.reject(error.response.data.error);
+    return Promise.reject();
   }
 };
 
@@ -30,7 +30,7 @@ export const deleteStudent = (id) => async (dispatch) => {
     return Promise.resolve();
   } catch (error) {
     dispatch({ type: Const.DELETE_STUDENT_REJECTED, payload: error.response.data.error });
-    return Promise.reject(error.response.data.error);
+    return Promise.reject();
   }
 };
 
@@ -43,7 +43,7 @@ export const addStudent = (submitData) => async (dispatch) => {
     return Promise.resolve();
   } catch (error) {
     dispatch({ type: Const.ADD_STUDENT_REJECTED, payload: error.response.data.error });
-    return Promise.reject(error.response.data.error);
+    return Promise.reject();
   }
 };
 
@@ -56,7 +56,7 @@ export const updateStudent = (submitData) => async (dispatch) => {
     return Promise.resolve();
   } catch (error) {
     dispatch({ type: Const.UPDATE_STUDENT_REJECTED });
-    return Promise.reject(error.response.data.error);
+    return Promise.reject();
   }
 };
 
@@ -71,7 +71,7 @@ export const uploadStudentExcel = (file) => async (dispatch) => {
     return Promise.resolve();
   } catch (error) {
     dispatch({ type: Const.UPLOAD_STUDENT_EXCEL_FULFILLED });
-    return Promise.reject(error.response.data.error);
+    return Promise.reject();
   }
 };
 
@@ -88,6 +88,6 @@ export const downloadStudentExcel = () => async (dispatch) => {
       type: Const.DOWNLOAD_STUDENT_EXCEL_REJECTED,
       payload: error
     });
-    return Promise.reject(error.response.data.error);
+    return Promise.reject();
   }
 };
