@@ -11,13 +11,12 @@ import Enums from 'src/libraries/enums';
 
 import './assets/index.scss';
 
-const TransactionResultModal = (props) => {
+const CustomModal = (props) => {
   const {
     modalType,
     alertType,
     content,
     title,
-    open,
     onClickClose,
     size,
     children,
@@ -49,7 +48,7 @@ const TransactionResultModal = (props) => {
   );
 
   return (
-    <Modal className={size} open={open} onClose={() => onClickClose && onClickClose()}>
+    <Modal className={size} open={true} onClose={() => onClickClose && onClickClose()}>
       {modalType === Enums.ALERT_MODAL ? (
         <Grid className={`modal-wrapper ${size}`} container>
           <Grid className="p20" item xs={8} height="100%">
@@ -89,10 +88,10 @@ const TransactionResultModal = (props) => {
   );
 };
 
-TransactionResultModal.defaultProps = {
+CustomModal.defaultProps = {
   size: 'md' /* sm , md , lg, xl */,
-  alertType: Enums.SUCCESS /* SUCCESS , ERROR */,
+  alertType: Enums.ERROR /* SUCCESS , ERROR */,
   modalType: Enums.ALERT_MODAL /* ALERT_MODAL, CONTENT_MODAL */
 };
 
-export default TransactionResultModal;
+export default CustomModal;

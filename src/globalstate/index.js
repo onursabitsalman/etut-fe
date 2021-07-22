@@ -12,7 +12,9 @@ import {
   teacherListReducer,
   deleteTeacherReducer,
   addTeacherReducer,
-  updateTeacherReducer
+  updateTeacherReducer,
+  uploadTeacherExcelReducer,
+  downloadTeacherExcelReducer
 } from './states/admin/teacher/reducer';
 
 export default combineReducers({
@@ -26,5 +28,7 @@ export default combineReducers({
   teacherListReducer,
   deleteTeacherReducer,
   addTeacherReducer,
-  updateTeacherReducer
+  updateTeacherReducer,
+  uploadTeacherExcelReducer,
+  downloadTeacherExcelReducer
 });

@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import { Formik, Form } from 'formik';
 import * as Yup from 'yup';
 
-import TransactionResultModal from 'src/components/transaction-result-modal';
+import CustomModal from 'src/components/custom-modal';
 import TextField from 'src/components/formElement/textfield';
 import Button from 'src/components/formElement/button';
 import Enums from 'src/libraries/enums';
@@ -73,7 +73,7 @@ const AddingTeacher = (props) => {
   };
 
   return (
-    <TransactionResultModal
+    <CustomModal
       title={isUpdatingTeacher ? 'Profil' : 'Öğretmen Ekle'}
       modalType={Enums.CONTENT_MODAL}
       {...props}
@@ -109,7 +109,7 @@ const AddingTeacher = (props) => {
           </Box>
         </Form>
       </Formik>
-    </TransactionResultModal>
+    </CustomModal>
   );
 };
 

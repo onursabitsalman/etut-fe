@@ -70,7 +70,10 @@ export const uploadStudentExcel = (file) => async (dispatch) => {
     dispatch(getStudentList());
     return Promise.resolve();
   } catch (error) {
-    dispatch({ type: Const.UPLOAD_STUDENT_EXCEL_FULFILLED });
+    dispatch({
+      type: Const.UPLOAD_STUDENT_EXCEL_REJECTED,
+      payload: error.response.data.errorMessage
+    });
     return Promise.reject();
   }
 };
@@ -78,7 +81,7 @@ export const uploadStudentExcel = (file) => async (dispatch) => {
 export const downloadStudentExcel = () => async (dispatch) => {
   dispatch({ type: Const.DOWNLOAD_STUDENT_EXCEL_PENDING });
   try {
-    const response = await axios.get(`${Enums.SERVER_URL}/student/export`, {
+    const response = await axios.get(`${Enums.SERVER_URL}/student/exportt`, {
       responseType: 'blob'
     });
     dispatch({ type: Const.DOWNLOAD_STUDENT_EXCEL_FULFILLED });
@@ -86,7 +89,7 @@ export const downloadStudentExcel = () => async (dispatch) => {
   } catch (error) {
     dispatch({
       type: Const.DOWNLOAD_STUDENT_EXCEL_REJECTED,
-      payload: error
+      payload: error.response.data.errorMessage || 'errorMessage ekletilecek'
     });
     return Promise.reject();
   }

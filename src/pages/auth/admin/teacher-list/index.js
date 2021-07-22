@@ -1,26 +1,38 @@
 import React, { useState, useEffect } from 'react';
 import { Helmet } from 'react-helmet';
 import { connect } from 'react-redux';
-import Box from '@material-ui/core/Box';
+import fileDownload from 'js-file-download';
 import MUIDataTable from 'mui-datatables';
 
-import NoteAddIcon from '@material-ui/icons/NoteAdd';
+import Box from '@material-ui/core/Box';
+import Input from '@material-ui/core/Input';
+
 import PersonAddIcon from '@material-ui/icons/PersonAdd';
+import CloudDownloadIcon from '@material-ui/icons/CloudDownload';
+import BackupIcon from '@material-ui/icons/Backup';
 
 import Button from 'src/components/formElement/button';
 import ShowError from 'src/components/show-error';
 import Loading from 'src/components/loading';
 import AddingTeacher from './addingTeacher';
+import CustomModal from 'src/components/custom-modal';
+
+import Enums from 'src/libraries/enums';
 
 import { getColumns } from './helper';
 
 import {
   getTeacherList,
-  deleteTeacher
+  deleteTeacher,
+  uploadTeacherExcel,
+  downloadTeacherExcel
 } from 'src/globalstate/states/admin/teacher/action';
 
 const modalEnums = {
-  ADDING_TEACHER: 'ADDING_TEACHER'
+  ADDING_TEACHER: 'ADDING_TEACHER',
+  ERROR_DELETE_TEACHER: 'ERROR_DELETE_TEACHER',
+  ERROR_DOWNLOAD_EXCEL: 'ERROR_DOWNLOAD_EXCEL',
+  ERROR_UPLOAD_EXCEL: 'ERROR_UPLOAD_EXCEL'
 };
 
 /* TODO: ders listelerini getirecek api istenicek */
@@ -34,8 +46,6 @@ const TeacherList = (props) => {
   }, []);
 
   const handleClickIcon = (e, calledFunction, studentId) => {
-    console.log('studentId: ', studentId);
-    console.log('calledFunction: ', calledFunction);
     e.stopPropagation();
     setUpdatedTeacher(
       props.teacherListReducer.data.teacherList.find((s) => s.id === studentId)
@@ -53,7 +63,34 @@ const TeacherList = (props) => {
     const deletedTeacherIds = data.map(
       (d) => props.teacherListReducer.data.teacherList[d.index].id
     );
-    props.deleteTeacher(deletedTeacherIds);
+    props
+      .deleteTeacher(deletedTeacherIds)
+      .then()
+      .catch(() => {
+        setModal(modalEnums.ERROR_DELETE_TEACHER);
+      });
+  };
+
+  const handleDownloadExcel = () => {
+    props
+      .downloadTeacherExcel()
+      .then((response) => {
+        fileDownload(response.data, 'öğretmen-listesi.xlsx');
+      })
+      .catch(() => {
+        setModal(modalEnums.ERROR_DOWNLOAD_EXCEL);
+      });
+  };
+
+  const handleUploadExcel = (e) => {
+    const bodyFormData = new FormData();
+    bodyFormData.append('file', e.target.files[0]);
+    props
+      .uploadTeacherExcel(bodyFormData)
+      .then()
+      .catch(() => {
+        setModal(modalEnums.ERROR_UPLOAD_EXCEL);
+      });
   };
 
   const handleCloseModal = () => {
@@ -79,11 +116,26 @@ const TeacherList = (props) => {
               onClick={handleAddTeacher}
             />
             <Button
-              className="mL5"
-              color="primary"
+              startIcon={<BackupIcon />}
               variant="outlined"
-              startIcon={<NoteAddIcon />}
+              component="label"
               text="Excel Yükle"
+              className="mL5 mR5"
+              loading={props.uploadTeacherExcelReducer.fetching}
+            >
+              <Input
+                type="file"
+                sx={{ display: 'none' }}
+                onChange={handleUploadExcel}
+                inputProps={{ accept: '.xlsx , .xls' }}
+              />
+            </Button>
+            <Button
+              variant="outlined"
+              startIcon={<CloudDownloadIcon />}
+              text="EXCEL OLARAK İNDİR"
+              onClick={handleDownloadExcel}
+              loading={props.downloadTeacherExcelReducer.fetching}
             />
           </Box>
           <MUIDataTable
@@ -98,10 +150,27 @@ const TeacherList = (props) => {
             }}
           />
           {modal === modalEnums.ADDING_TEACHER && (
-            <AddingTeacher
-              open={true}
+            <AddingTeacher onClickClose={handleCloseModal} teacher={updatedTeacher} />
+          )}
+          {modal === modalEnums.ERROR_DELETE_TEACHER && (
+            <CustomModal
               onClickClose={handleCloseModal}
-              teacher={updatedTeacher}
+              title="Öğretmen Silme"
+              content={props.deleteTeacherReducer.error}
+            />
+          )}
+          {modal === modalEnums.ERROR_DOWNLOAD_EXCEL && (
+            <CustomModal
+              onClickClose={handleCloseModal}
+              title="Excel Olarak İndir"
+              content={props.downloadTeacherExcelReducer.error}
+            />
+          )}
+          {modal === modalEnums.ERROR_UPLOAD_EXCEL && (
+            <CustomModal
+              onClickClose={handleCloseModal}
+              title="Excel Yükle"
+              content={props.uploadTeacherExcelReducer.error}
             />
           )}
         </Box>
@@ -112,12 +181,16 @@ const TeacherList = (props) => {
 
 const mapStateToProps = (state) => ({
   teacherListReducer: state.teacherListReducer,
-  deleteTeacherReducer: state.deleteTeacherReducer
+  deleteTeacherReducer: state.deleteTeacherReducer,
+  downloadTeacherExcelReducer: state.downloadTeacherExcelReducer,
+  uploadTeacherExcelReducer: state.uploadTeacherExcelReducer
 });
 
 const mapDispatchToProps = {
   getTeacherList,
-  deleteTeacher
+  deleteTeacher,
+  downloadTeacherExcel,
+  uploadTeacherExcel
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(TeacherList);

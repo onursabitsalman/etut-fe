@@ -18,6 +18,14 @@ const initials = {
   updateTeacher: {
     fetching: false,
     error: null
+  },
+  uploadTeacherExcel: {
+    fetching: false,
+    error: null
+  },
+  downloadTeacherExcel: {
+    fetching: false,
+    error: null
   }
 };
 
@@ -120,6 +128,56 @@ export const updateTeacherReducer = (state = initials.updateTeacher, action) => 
         fetching: false
       };
     }
+    default:
+      return state;
+  }
+};
+
+export const uploadTeacherExcelReducer = (
+  state = initials.uploadTeacherExcel,
+  action
+) => {
+  switch (action.type) {
+    case Const.UPLOAD_TEACHER_EXCEL_PENDING:
+      return {
+        ...state,
+        fetching: true
+      };
+    case Const.UPLOAD_TEACHER_EXCEL_FULFILLED:
+      return {
+        fetching: false,
+        error: null
+      };
+    case Const.UPLOAD_TEACHER_EXCEL_REJECTED:
+      return {
+        fetching: false,
+        error: action.payload
+      };
+    default:
+      return state;
+  }
+};
+
+export const downloadTeacherExcelReducer = (
+  state = initials.downloadTeacherExcel,
+  action
+) => {
+  switch (action.type) {
+    case Const.DOWNLOAD_TEACHER_EXCEL_PENDING:
+      return {
+        ...state,
+        fetching: true
+      };
+    case Const.DOWNLOAD_TEACHER_EXCEL_FULFILLED:
+      return {
+        fetching: false,
+        error: null
+      };
+    case Const.DOWNLOAD_TEACHER_EXCEL_REJECTED:
+      return {
+        fetching: false,
+        error: action.payload
+      };
     default:
       return state;
   }

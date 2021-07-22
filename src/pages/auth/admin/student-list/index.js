@@ -10,7 +10,7 @@ import PersonAddIcon from '@material-ui/icons/PersonAdd';
 import CloudDownloadIcon from '@material-ui/icons/CloudDownload';
 import BackupIcon from '@material-ui/icons/Backup';
 
-import TransactionResultModal from 'src/components/transaction-result-modal';
+import CustomModal from 'src/components/custom-modal';
 import Loading from 'src/components/loading';
 import Title from 'src/components/title';
 import ShowError from 'src/components/show-error';
@@ -29,13 +29,14 @@ import {
 import { getColumns } from './helper';
 
 const modalEnums = {
-  UPLOADED_EXCEL: 'UPLOADED_EXCEL',
   ADDING_STUDENT: 'ADDING_STUDENT',
-  ERROR_DELETE_STUDENT: 'ERROR_DELETE_STUDENT'
+  ERROR_DELETE_STUDENT: 'ERROR_DELETE_STUDENT',
+  ERROR_UPLOAD_EXCEL: 'ERROR_UPLOAD_EXCEL',
+  ERROR_DOWNLOAD_EXCEL: 'ERROR_DOWNLOAD_EXCEL'
 };
 
 const StudentList = (props) => {
-  const [modal, setModal] = useState({ name: '', alertType: '', content: '' });
+  const [modal, setModal] = useState();
   const [updatedStudent, setUpdatedStudent] = useState(null);
 
   useEffect(() => {
@@ -48,19 +49,24 @@ const StudentList = (props) => {
       props.studentListReducer.data.studentList.find((s) => s.id === studentId)
     );
     if (calledFunction === '2') {
-      setModal({ name: modalEnums.ADDING_STUDENT });
+      setModal(modalEnums.ADDING_STUDENT);
     }
   };
 
   const handleCloseModal = () => {
-    setModal({ name: '' });
+    setModal('');
     setUpdatedStudent(null);
   };
 
   const handleUploadExcel = (e) => {
     var bodyFormData = new FormData();
     bodyFormData.append('file', e.target.files[0]);
-    props.uploadStudentExcel(bodyFormData);
+    props
+      .uploadStudentExcel(bodyFormData)
+      .then()
+      .catch(() => {
+        setModal(modalEnums.ERROR_UPLOAD_EXCEL);
+      });
   };
 
   const handleDelete = ({ data }) => {
@@ -70,15 +76,20 @@ const StudentList = (props) => {
     props
       .deleteStudent(deletedStudentIds)
       .then()
-      .catch((error) => {
-        setModal({ name: modalEnums.ERROR_DELETE_STUDENT });
+      .catch(() => {
+        setModal(modalEnums.ERROR_DELETE_STUDENT);
       });
   };
 
   const handleDownloadExcel = () => {
-    props.downloadStudentExcel().then((response) => {
-      fileDownload(response.data, 'ögrenci-listesi.xlsx');
-    });
+    props
+      .downloadStudentExcel()
+      .then((response) => {
+        fileDownload(response.data, 'ögrenci-listesi.xlsx');
+      })
+      .catch(() => {
+        setModal(modalEnums.ERROR_DOWNLOAD_EXCEL);
+      });
   };
 
   return (
@@ -95,7 +106,7 @@ const StudentList = (props) => {
             <Button
               startIcon={<PersonAddIcon />}
               text="Öğrenci Ekle"
-              onClick={() => setModal({ name: modalEnums.ADDING_STUDENT })}
+              onClick={() => setModal(modalEnums.ADDING_STUDENT)}
             />
             <Button
               startIcon={<BackupIcon />}
@@ -131,29 +142,28 @@ const StudentList = (props) => {
               download: false
             }}
           />
-          {modal.name === modalEnums.UPLOADED_EXCEL && (
-            <TransactionResultModal
-              open={modal.name}
-              onClickClose={handleCloseModal}
-              title="Excel Yükleme"
-              alertType={modal.type}
-              content={modal.content}
-            />
+          {modal === modalEnums.ADDING_STUDENT && (
+            <AddingStudent onClickClose={handleCloseModal} student={updatedStudent} />
           )}
-          {modal.name === modalEnums.ERROR_DELETE_STUDENT && (
-            <TransactionResultModal
-              open={modal.name}
+          {modal === modalEnums.ERROR_DELETE_STUDENT && (
+            <CustomModal
               onClickClose={handleCloseModal}
               title="Öğrenci Silme"
-              alertType={Enums.ERROR}
               content={props.deleteStudentReducer.error}
             />
           )}
-          {modal.name === modalEnums.ADDING_STUDENT && (
-            <AddingStudent
-              open={modal.name}
+          {modal === modalEnums.ERROR_UPLOAD_EXCEL && (
+            <CustomModal
               onClickClose={handleCloseModal}
-              student={updatedStudent}
+              title="Excel Yükle"
+              content={props.uploadStudentExcelReducer.error}
+            />
+          )}
+          {modal === modalEnums.ERROR_DOWNLOAD_EXCEL && (
+            <CustomModal
+              onClickClose={handleCloseModal}
+              title="Excel Olarak İndiR"
+              content={props.downloadStudentExcelReducer.error}
             />
           )}
         </Box>
