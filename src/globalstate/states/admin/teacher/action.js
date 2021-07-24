@@ -86,7 +86,6 @@ export const downloadTeacherExcel = () => async (dispatch) => {
     dispatch({ type: Const.DOWNLOAD_TEACHER_EXCEL_FULFILLED });
     return Promise.resolve(response);
   } catch (error) {
-    console.log('error: ', error.response);
     dispatch({
       type: Const.DOWNLOAD_TEACHER_EXCEL_REJECTED,
       payload: error.response.data.message || 'Hata mesajı ekletilecek'

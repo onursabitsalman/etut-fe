@@ -7,7 +7,7 @@ import Alert from '@material-ui/lab/Alert';
 import { connect } from 'react-redux';
 import { Helmet } from 'react-helmet';
 import { Formik, Form } from 'formik';
-import { useNavigate } from 'react-router-dom';
+import { useHistory } from 'react-router-dom';
 import jwt_decode from 'jwt-decode';
 import * as Yup from 'yup';
 
@@ -28,17 +28,16 @@ const INITIAL_FORM_VALUES = {
 };
 
 const Login = (props) => {
-  const navigate = useNavigate();
-
+  const history = useHistory();
   const handleSubmitLogin = (submitData) => {
     props.login(submitData.userName, submitData.password).then((response) => {
       const decoded = jwt_decode(response.authorization.replace('Bearer ', ''));
       if (decoded.sub === Enums.ADMIN) {
-        navigate('auth/admin/dashboard');
+        history.replace('admin/dashboard');
       } else if (decoded.sub === Enums.STUDENT) {
-        navigate('auth/student/dashboard');
+        history.replace('student/dashboard');
       } else if (decoded.sub === Enums.TEACHER) {
-        navigate('auth/teacher/dashboard');
+        history.replace('teacher/dashboard');
       }
     });
   };

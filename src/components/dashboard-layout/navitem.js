@@ -1,26 +1,13 @@
-import {
-  NavLink as RouterLink,
-  matchPath,
-  useLocation
-} from 'react-router-dom';
+import { NavLink as RouterLink, matchPath, useLocation } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import { Button, ListItem } from '@material-ui/core';
 
 const NavItem = ({ href, icon: Icon, title, ...rest }) => {
   const location = useLocation();
 
-  let active = href
-    ? !!matchPath(
-        {
-          /* TODO:// login reducer!a kullanıcı tipi kaydedildikten sonra kullanıcı tipi ordan okunacak */
-          path: `auth/admin/${href}`,
-          end: false
-        },
-        location.pathname
-      )
-    : false;
+  /* kullanıcıya göre ["admin", "student", "teacher"] olarak duzenleneck */
+  let active = href ? matchPath(location.pathname, `/admin/${href}`) : false;
 
-  active = href === '/' ? false : active;
   return (
     <ListItem
       disableGutters
@@ -47,7 +34,7 @@ const NavItem = ({ href, icon: Icon, title, ...rest }) => {
             mr: 1
           }
         }}
-        to={href}
+        to={`/admin/${href}`}
       >
         {Icon && <Icon size="20" />}
         <span>{title}</span>

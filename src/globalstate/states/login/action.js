@@ -10,7 +10,7 @@ export const login = (username, password) => async (dispatch) => {
       username,
       password
     });
-    dispatch({ type: Const.LOGIN_FULFILLED });
+    dispatch({ type: Const.LOGIN_FULFILLED, payload: headers.authorization });
     localStorage.setItem('access_token', headers.authorization);
     return Promise.resolve(headers);
   } catch (error) {

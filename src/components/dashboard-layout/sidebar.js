@@ -123,12 +123,7 @@ const SideBar = ({ onMobileClose, openMobile }) => {
 
   const content = (
     <Box display="flex" flexDirection="column" height="100%">
-      <Box
-        display="flex"
-        flexDirection="column"
-        alignItems="center"
-        className="p15"
-      >
+      <Box display="flex" flexDirection="column" alignItems="center" className="p15">
         <Typography color="textPrimary" variant="h5">
           {user.name}
         </Typography>
@@ -162,9 +157,7 @@ const SideBar = ({ onMobileClose, openMobile }) => {
           open={openMobile}
           variant="temporary"
           PaperProps={{
-            sx: {
-              width: 256
-            }
+            sx: { width: 256 }
           }}
         >
           {content}

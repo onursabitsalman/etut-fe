@@ -3,8 +3,9 @@ import MainLayout from 'src/components/main-layout';
 
 import AdminDashboard from 'src/pages/auth/admin/dashboard';
 import StudentList from 'src/pages/auth/admin/student-list';
-import TeacherList from 'src/pages/auth/admin/teacher-list';
 import AdminSettings from 'src/pages/auth/admin/settings';
+import TeacherList from 'src/pages/auth/admin/teacher-list';
+import SetCourse from 'src/pages/auth/admin/teacher-list/set-course';
 
 import StudentDashboard from 'src/pages/auth/student/dashboard';
 import StudentAccount from 'src/pages/auth/student/account';
@@ -19,52 +20,43 @@ import Lessons from 'src/pages/auth/teacher/lessons';
 import Login from 'src/pages/login';
 import NotFound from 'src/pages/not-found';
 
-const routes = [
-  {
-    path: '/',
-    element: <MainLayout />,
-    children: [
-      { path: '/', element: <Login /> },
-      { path: '404', element: <NotFound /> }
-      /* { path: '/', element: <Navigate to="/auth/admin/dashboard" /> }, */
-      /*  { path: '*', element: <Navigate to="/404" /> } */
-    ]
-  },
-  {
-    path: 'auth/admin',
-    element: <DashboardLayout />,
-    children: [
-      { path: 'dashboard', element: <AdminDashboard /> },
-      { path: 'teachers', element: <TeacherList /> },
-      { path: 'students', element: <StudentList /> },
-      { path: 'settings', element: <AdminSettings /> }
-      /*  { path: '*', element: <Navigate to="/404" /> } */
-    ]
-  },
-  {
-    path: 'auth/student',
-    element: <DashboardLayout />,
-    children: [
-      { path: 'dashboard', element: <StudentDashboard /> },
-      { path: 'account', element: <StudentAccount /> },
-      { path: 'take-lessons', element: <TakeLesson /> },
-      { path: 'settings', element: <StudentSettings /> }
+import { Switch, Route } from 'react-router-dom';
 
-      /*  { path: '*', element: <Navigate to="/404" /> } */
-    ]
-  },
-  {
-    path: 'auth/teacher',
-    element: <DashboardLayout />,
-    children: [
-      { path: 'dashboard', element: <TeacherDashboard /> },
-      { path: 'account', element: <TeacherAccount /> },
-      { path: 'lessons', element: <Lessons /> },
-      { path: 'settings', element: <TeacherSettings /> }
+const useRoutes = () => {
+  return (
+    <Switch>
+      <Route
+        path="/"
+        exact
+        render={() => (
+          <MainLayout>
+            <Route component={Login} />
+          </MainLayout>
+        )}
+      />
+      <Route
+        path="/admin"
+        render={({ match: { url } }) => (
+          <DashboardLayout>
+            <Route path={`${url}/dashboard`} component={AdminDashboard} />
+            <Route
+              path={`${url}/teachers`}
+              render={({ match: { url } }) => (
+                <>
+                  <Route path={`${url}`} component={TeacherList} exact />
+                  <Route path={`${url}/set-course`} component={SetCourse} />
+                </>
+              )}
+            />
+            <Route path={`${url}/students`} component={StudentList} />
+            <Route path={`${url}/settings`} component={AdminSettings} />
+          </DashboardLayout>
+        )}
+      />
 
-      /* { path: '*', element: <Navigate to="/404" /> } */
-    ]
-  }
-];
+      {/* <Route component={NotFound} /> */}
+    </Switch>
+  );
+};
 
-export default routes;
+export default useRoutes;

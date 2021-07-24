@@ -36,7 +36,7 @@ const DashboardLayoutContent = experimentalStyled('div')({
   overflow: 'auto'
 });
 
-const DashboardLayout = () => {
+const DashboardLayout = ({ children }) => {
   const [isMobileNavOpen, setMobileNavOpen] = useState(false);
 
   return (
@@ -48,9 +48,7 @@ const DashboardLayout = () => {
       />
       <DashboardLayoutWrapper>
         <DashboardLayoutContainer>
-          <DashboardLayoutContent>
-            <Outlet />
-          </DashboardLayoutContent>
+          <DashboardLayoutContent>{children}</DashboardLayoutContent>
         </DashboardLayoutContainer>
       </DashboardLayoutWrapper>
     </DashboardLayoutRoot>

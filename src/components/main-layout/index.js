@@ -30,14 +30,12 @@ const MainLayoutContent = experimentalStyled('div')({
   overflow: 'auto'
 });
 
-const MainLayout = () => (
+const MainLayout = ({ children }) => (
   <MainLayoutRoot>
     <NavBar />
     <MainLayoutWrapper>
       <MainLayoutContainer>
-        <MainLayoutContent>
-          <Outlet />
-        </MainLayoutContent>
+        <MainLayoutContent>{children}</MainLayoutContent>
       </MainLayoutContainer>
     </MainLayoutWrapper>
   </MainLayoutRoot>

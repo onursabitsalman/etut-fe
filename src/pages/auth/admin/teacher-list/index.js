@@ -3,6 +3,7 @@ import { Helmet } from 'react-helmet';
 import { connect } from 'react-redux';
 import fileDownload from 'js-file-download';
 import MUIDataTable from 'mui-datatables';
+import { useLocation, useHistory } from 'react-router-dom';
 
 import Box from '@material-ui/core/Box';
 import Input from '@material-ui/core/Input';
@@ -40,6 +41,8 @@ const modalEnums = {
 const TeacherList = (props) => {
   const [modal, setModal] = useState('');
   const [updatedTeacher, setUpdatedTeacher] = useState(null);
+  const history = useHistory();
+  const location = useLocation();
 
   useEffect(() => {
     props.getTeacherList();
@@ -52,6 +55,8 @@ const TeacherList = (props) => {
     );
     if (calledFunction === '3') {
       setModal(modalEnums.ADDING_TEACHER);
+    } else if (calledFunction == '1') {
+      history.replace(`${location.pathname}/set-course`);
     }
   };
 

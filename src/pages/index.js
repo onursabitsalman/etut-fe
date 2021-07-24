@@ -2,9 +2,7 @@ import React, { useEffect } from 'react';
 import { connect } from 'react-redux';
 import { ThemeProvider } from '@material-ui/core';
 
-import { useRoutes } from 'react-router-dom';
-
-import routes from './routes';
+import useRoutes from './routes';
 import theme from '../assets/theme';
 import { setupAxiosInterceptor } from '../config/axios';
 
@@ -16,7 +14,8 @@ const App = (props) => {
     setupAxiosInterceptor();
   }, [props.loginReducer.success]);
 
-  const routing = useRoutes(routes);
+  const routing = useRoutes();
+
   return <ThemeProvider theme={theme}>{routing}</ThemeProvider>;
 };
 
