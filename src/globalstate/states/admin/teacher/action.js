@@ -17,7 +17,7 @@ export const getTeacherList = () => async (dispatch) => {
 export const deleteTeacher = (ids) => async (dispatch) => {
   dispatch({ type: Const.DELETE_TEACHER_PENDING });
   try {
-    await axios.delete(`${Enums.SERVER_URL}/teacherrr/${ids.join(',')}`);
+    await axios.delete(`${Enums.SERVER_URL}/teacher/${ids.join(',')}`);
     dispatch({ type: Const.DELETE_TEACHER_FULFILLED });
     dispatch(getTeacherList());
     return Promise.resolve();
