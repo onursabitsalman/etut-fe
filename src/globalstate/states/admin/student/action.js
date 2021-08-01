@@ -81,7 +81,7 @@ export const uploadStudentExcel = (file) => async (dispatch) => {
 export const downloadStudentExcel = () => async (dispatch) => {
   dispatch({ type: Const.DOWNLOAD_STUDENT_EXCEL_PENDING });
   try {
-    const response = await axios.get(`${Enums.SERVER_URL}/student/exportt`, {
+    const response = await axios.get(`${Enums.SERVER_URL}/student/export`, {
       responseType: 'blob'
     });
     dispatch({ type: Const.DOWNLOAD_STUDENT_EXCEL_FULFILLED });
