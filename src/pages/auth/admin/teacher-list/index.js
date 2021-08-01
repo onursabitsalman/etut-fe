@@ -48,15 +48,15 @@ const TeacherList = (props) => {
     props.getTeacherList();
   }, []);
 
-  const handleClickIcon = (e, calledFunction, studentId) => {
+  const handleClickIcon = (e, calledFunction, teacherId) => {
     e.stopPropagation();
     setUpdatedTeacher(
-      props.teacherListReducer.data.teacherList.find((s) => s.id === studentId)
+      props.teacherListReducer.data.teacherList.find((s) => s.id === teacherId)
     );
     if (calledFunction === '3') {
       setModal(modalEnums.ADDING_TEACHER);
     } else if (calledFunction == '1') {
-      history.replace(`${location.pathname}/set-course`);
+      history.replace(`${location.pathname}/set-course/${teacherId}`);
     }
   };
 

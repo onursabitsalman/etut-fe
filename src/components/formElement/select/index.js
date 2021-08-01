@@ -14,6 +14,7 @@ const SelectWrapper = ({ name, options, ...rest }) => {
     variant: 'outlined',
     fullWidth: true,
     select: true,
+    size: 'small',
     className: 'mB10',
     ...field,
     ...rest,
@@ -27,10 +28,10 @@ const SelectWrapper = ({ name, options, ...rest }) => {
 
   return (
     <TextField {...configSelect}>
-      {Object.keys(options).map((optionKey) => {
+      {options.map((option) => {
         return (
-          <MenuItem key={optionKey} value={optionKey}>
-            {options[optionKey]}
+          <MenuItem key={option.value} value={option.value}>
+            {option.label}
           </MenuItem>
         );
       })}

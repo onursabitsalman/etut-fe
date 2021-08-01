@@ -44,7 +44,7 @@ const useRoutes = () => {
               render={({ match: { url } }) => (
                 <>
                   <Route path={`${url}`} component={TeacherList} exact />
-                  <Route path={`${url}/set-course`} component={SetCourse} />
+                  <Route path={`${url}/set-course/:id`} component={SetCourse} />
                 </>
               )}
             />
